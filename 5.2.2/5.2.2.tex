@@ -1,0 +1,217 @@
+\documentclass{lab}
+
+\renewcommand{\AA}{\ensuremath{\mathring{A}}}
+
+\begin{document}
+
+\labtitle{5.2.2}{Изучение спектров водорода и йода}{14~ноября~2019~г.}{21~ноября~2019~г.}
+
+\section*{Постановка эксперимента}
+
+\begin{quote}
+	\textbf{{\normalsize Цель работы: }}откалибровать спектрометр по линиям неона и ртути, определить координаты линий серии Бальмера атомарного водорода, рассчитать постоянную Ридберга. Вычислить энергию колебательного кванта молекулы йода и энергию ее диссоциации в основном и возбужденном состоянии.
+\end{quote}
+	
+\section*{Экспериментальная установка}
+
+Длины волн спектральных линий водородоподобного атома:
+\begin{equation}
+\dfrac{1}{\lambda_{nm}} = RZ^2 \left( \dfrac{1}{n^2} - \dfrac{1}{m^2} \right)
+\end{equation}
+Энергия кванта в возбужденном состоянии:
+\begin{equation}
+h\nu_2 = \dfrac{h(\nu_{1.5} - \nu_{1.0})}{5}
+\end{equation}
+Энергия диссоциации:
+\begin{equation}
+D_1 = h\nu_{гр} - E_A
+\end{equation}
+
+\section*{Выполнение работы}
+
+\begin{enumerate}
+
+\item
+Калибровка барабана спектрометра линиями неона и ртути:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|cc|cccccc|}
+	\hline
+	\multirow{2}{2cm}{Неон}  & $\lambda,~\AA{}$ & 7032 & 6402 & 6164 & 6030 & 5852 & 5401 \\
+	                         & $\varphi,~^{\circ}$ & 2586 & 2370 & 2270 & 2212 & 2128 & 1870 \\ \hline
+	\multirow{2}{2cm}{Ртуть} & $\lambda,~нм$    & 623.4& 579.1& 577  & 546.1& 491.6& 404.7\\
+	                         & $\varphi,~^{\circ}$ & 2302 & 2094 & 2084 & 1902 & 1486 & 822  \\
+	\hline
+		
+	\end{tabular}
+	\label{tab1}
+\end{table}
+
+\item 
+Определение длин волн водорода с помощью калибровочного графика (графики приведены ниже) и проверка формулы сериальной закономерности:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|ccccc|}
+		\hline
+		$\varphi,~^{\circ}$ & $\lambda,~нм$ & n & $1/\lambda,~нм^2$ & $1/4 - 1/n^2$ \\ \hline
+		114  & 393 & 6 & 0.00253 & 0.2222 \\
+		530  & 401 & 5 & 0.00249 & 0.2100 \\
+		1166 & 458 & 4 & 0.00218 & 0.1875 \\
+		2160 & 662 & 3 & 0.00151 & 0.1389 \\
+		\hline
+		
+	\end{tabular}
+	\label{tab2}
+\end{table}
+
+\item 
+Из зависимости $ 1/\lambda $ от $ 1/4 - 1/n^2 $ $(коэффициент~наклона \cdot 10^4~см^{-1})$ находим постоянную Ридберга: $ R = (11.5 \pm 0.2) \cdot 10^4 ~ см^{-1} $.
+
+\item
+Приведем графики градуировок:
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	
+	\pgfplotstableread{
+		X	    Y			x-err		y-err
+		2586	7032		20	 		100
+		2370	6402		20			100
+		2270	6164		20			100
+		2212	6030		20			100
+		2128	5852		20			100
+		1870	5401		20			100
+	}{\mytable}
+	
+	\begin{axis}[
+	width = 0.75\textwidth,
+	grid = major,
+	xlabel = $ \varphi\text{,}~^{\circ} $,
+	ylabel = $ \lambda\text{,}~\AA{} $,
+	ymin = 5200,
+	ymax = 7200,
+	xmin = 1800,
+	xmax = 2700
+	]
+	
+	
+	\addplot[
+	only marks,
+	color = red,
+	mark = *,
+	error bars/.cd,
+	x dir = both,
+	x explicit,
+	y dir = both,
+	y explicit
+	]
+	table[
+	x error = x-err,
+	y error = y-err
+	] {\mytable};
+	
+	\addplot[
+	mark = none,
+	color = red
+	]
+	table[
+	y = {create col/linear regression={y=Y}}
+	] % compute a linear regression from the
+	{\mytable};
+	
+	\end{axis}
+	\end{tikzpicture}
+	\caption{$ y = 0.0012x^2 - 3.0077x + 6883.5 $}
+	\label{graph1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\begin{tikzpicture}
+	
+	\pgfplotstableread{
+		X	    Y			x-err		y-err
+		2302	623.4		20	 		10
+		2094	579.1		20			10
+		2084	577 		20			10
+		1902	546.1		20			10
+		1486	491.6		20			10
+		822 	404.7		20			10
+	}{\mytable}
+	
+	\begin{axis}[
+	width = 0.75\textwidth,
+	grid = major,
+	xlabel = $ \varphi\text{,}~^{\circ} $,
+	ylabel = $ \lambda\text{,}~\text{нм} $,
+	ymin = 350,
+	ymax = 650,
+	xmin = 600,
+	xmax = 2400
+	]
+	
+	
+	\addplot[
+	only marks,
+	color = red,
+	mark = *,
+	error bars/.cd,
+	x dir = both,
+	x explicit,
+	y dir = both,
+	y explicit
+	]
+	table[
+	x error = x-err,
+	y error = y-err
+	] {\mytable};
+	
+	\addplot[
+	mark = none,
+	color = red
+	]
+	table[
+	y = {create col/linear regression={y=Y}}
+	] % compute a linear regression from the
+	{\mytable};
+	
+	\end{axis}
+	\end{tikzpicture}
+	\caption{$ y = 5\cdot10^{-5}x^2 + 0.0003x + 375.75 $}
+	\label{graph2}
+\end{figure}
+
+\item 
+Используя калибровку, определим длины волн в спектре йода:
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|ccc|}
+		\hline
+		$\varphi,~^{\circ}$ & $\lambda,~\AA{}$ & $h\nu$ \\ \hline
+		2054  & 6264 & $ h\nu_{1.0} = 1.979 $ \\
+		1970  & 6060 & $ h\nu_{1.5} = 2.046 $ \\
+		1356  & 5340 & $ h\nu_{гр} = 2.322 $  \\
+		\hline
+		
+	\end{tabular}
+	\label{tab3}
+\end{table}
+
+\item 
+Теперь расчеты:
+\begin{gather*}
+	h\nu_2 = (h\nu_{1.5} - h\nu_{1.0})/5 = 0.0133 \pm 0.0003~эВ\\
+	h\nu_{1.0} = (E_2 - E_1) + h\nu_2 \left( 1 + \dfrac{1}{2} \right) - \dfrac{3}{2} h\nu_1\\
+	h\nu_{1.0} = h\nu_{el} + \dfrac{3}{2} (h\nu_2 - h\nu_1) \then h\nu_{el} = 2.02 \pm 0.04~эВ\\
+	h\nu_{гр} = h\nu_{el} + D_2 = D_1 + E_A
+\end{gather*}
+Энергия диссоциации в возбужденном состоянии: $ D_2 = 0.30 \pm 0.01~эВ $.
+Энергия диссоциации в основном состоянии: $ D_1 = 1.08 \pm 0.04~эВ $.
+
+\end{enumerate}
+
+\subsection*{Итоги}
+
+Водородные длины волн соответствуют сериальной закономерности. Найдена постоянная Ридберга: $ R = (11.5 \pm 0.2) \cdot 10^4 ~ см^{-1} $. Табличное значение: $ R = 109677.5~см^{-1} $. Для йода найдены: энергия электронного перехода $ h\nu_{el} = 2.02 \pm 0.04~эВ $, энергии диссоциации в основном состоянии $ D_1 = 1.08 \pm 0.04~эВ $ и возбужденном $ D_2 = 0.30 \pm 0.01~эВ $.
+
+\end{document}
